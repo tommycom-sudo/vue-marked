@@ -1,11 +1,11 @@
 <template>
     <el-container style="border: 1px solid #eee">
       <el-aside width="200px" style=" text-align: left;background-color: rgb(238, 241, 246)">
-        <el-button :title="titles" @click="addNote" type="primary" icon="el-icon-circle-plus-outline">新增</el-button>
-   
-        <el-menu>
-          <el-menu-item @click="selectNote(note)" v-bind:index="note.id"  v-bind:key='note.id' v-for='note of notes'>
-          
+        <el-button :title="titles" @click="addNote" type="primary" icon="el-icon-circle-plus-outline">新增</el-button>  
+        <el-menu  v-bind:default-active="selectedId"
+       >
+          <el-menu-item @click="selectNote(note)" 
+            v-bind:index="note.id"  v-bind:key='note.id' v-for='note of notes'>
             <span slot="title">{{ note.title }}</span>
            </el-menu-item>
        </el-menu>
@@ -14,7 +14,8 @@
       <el-main style="padding: 0px; width: 50%">
         <el-container>
           <el-main style="padding: 0 5px 10px 0;overflow:hidden;height:10%;width: 100%">
-              <textarea style="margin: 0;height:100%; width: 99%" v-model="selectNote.content"></textarea>
+              <textarea style="margin: 0;height:100%; width: 99%" 
+                v-model="selectedNote.content"></textarea>
           </el-main>
           <el-footer style="padding: 0 5px 10px 0;">
             footer
@@ -29,6 +30,8 @@
   
 </template>
 <style lang="stylus">
+.el-menu-item.is-active
+  background-color: #DDDEFF
 body,
 html
   height: 100%
@@ -48,12 +51,18 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      notes: [],
-      selectedId: null
+      notes: JSON.parse(localStorage.getItem('notes')) || [],
+      selectedId: localStorage.getItem('selected-id') || null
     }
   },
   watch: {
-    notes: 'saveNotes'
+    selectedId(val){
+      localStorage.setItem('selected-id', val)
+    },
+    notes: {
+      handler: 'saveNotes',
+      deep: true
+    }
   },
   methods: {
     selectNote (note) {
