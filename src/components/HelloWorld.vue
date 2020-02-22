@@ -13,6 +13,10 @@
       <template v-if="selectedNote">
       <el-main style="padding: 0px; width: 50%">
         <el-container>
+          <el-header>
+            <el-input/>
+          </el-header>
+
           <el-main style="padding: 0 5px 10px 0;overflow:hidden;height:10%;width: 100%">
               <textarea style="margin: 0;height:100%; width: 99%" 
                 v-model="selectedNote.content"></textarea>
